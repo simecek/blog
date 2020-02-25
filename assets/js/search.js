@@ -8,7 +8,7 @@ var documents = [{
     "id": 1,
     "url": "https://simecek.github.io/about/",
     "title": "About Me",
-    "body": "This is where you put the contents of your About page. Like all your pages, it’s in Markdown format. This website is powered by fastpages 1.       a blogging platform that natively supports Jupyter notebooks in addition to other formats.  &#8617;    "
+    "body": "This is a blog about machines, deoxyribonucleic acids, clouds and all my mistakes. I love R, python, shiny, ditto, docker, dplyr, ggplot2, git, jupyter, numpy, pikachu, pyspark, pytorch, ubuntu and whiscash. If you know which of those are pokemons, I love you too. For more info about me, see my personal page, LinkedIn and a list of my publications. "
     }, {
     "id": 2,
     "url": "https://simecek.github.io/categories/",
