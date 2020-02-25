@@ -7,7 +7,7 @@
 # https://learnxinyminutes.com/docs/yaml/
 
 title: Oops, I Did It Again!
-description: A blog about machines, deoxyribonucleic acids and all my mistakes.
+description: A blog about machines, deoxyribonucleic acids, clouds and all my mistakes.
 github_username: simecek
 # you can comment the below line out if your repo name is not different than your baseurl
 github_repo: "blog"
