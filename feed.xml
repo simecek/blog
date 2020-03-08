@@ -1,4 +1,106 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://simecek.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://simecek.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-02-26T02:09:12-06:00</updated><id>https://simecek.github.io/blog/feed.xml</id><title type="html">Oops, I Did It Again!</title><subtitle>A blog about machines, deoxyribonucleic acids, clouds and all my mistakes.</subtitle><entry><title type="html">Oops, I did it again!</title><link href="https://simecek.github.io/blog/2020/02/25/Oops,-I-did-it-again!.html" rel="alternate" type="text/html" title="Oops, I did it again!" /><published>2020-02-25T00:00:00-06:00</published><updated>2020-02-25T00:00:00-06:00</updated><id>https://simecek.github.io/blog/2020/02/25/Oops,-I-did-it-again!</id><content type="html" xml:base="https://simecek.github.io/blog/2020/02/25/Oops,-I-did-it-again!.html">&lt;p&gt;I have been contributing my photos to Google Maps since 2017. Until today, my pictures have collected almost two million views.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://simecek.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://simecek.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-03-08T18:46:34-05:00</updated><id>https://simecek.github.io/blog/feed.xml</id><title type="html">Oops, I Did It Again!</title><subtitle>A blog about machines, deoxyribonucleic acids, clouds and all my mistakes.</subtitle><entry><title type="html">Jupyter Notebook In The Cloud (Amazon EC2)</title><link href="https://simecek.github.io/blog/2020/03/08/Jupyter-Notebook-on-Amazon-EC2-Virtual-Machine.html" rel="alternate" type="text/html" title="Jupyter Notebook In The Cloud (Amazon EC2)" /><published>2020-03-08T00:00:00-06:00</published><updated>2020-03-08T00:00:00-06:00</updated><id>https://simecek.github.io/blog/2020/03/08/Jupyter-Notebook-on-Amazon-EC2-Virtual-Machine</id><content type="html" xml:base="https://simecek.github.io/blog/2020/03/08/Jupyter-Notebook-on-Amazon-EC2-Virtual-Machine.html">&lt;h2 id=&quot;motivation&quot;&gt;Motivation&lt;/h2&gt;
+
+&lt;p&gt;If your computation needs overgrow a memory and disk size of your laptop, you need to look around for another solution: using &lt;a href=&quot;https://colab.research.google.com/&quot;&gt;&lt;span class=&quot;underline&quot;&gt;Google Colab&lt;/span&gt;&lt;/a&gt;, running your package as &lt;a href=&quot;http://simecek.xyz/shredded_code/2017/02/17/data-science-amazon-vm-with-start/stop-functionality/&quot;&gt;&lt;span class=&quot;underline&quot;&gt;a docker image&lt;/span&gt;&lt;/a&gt; elsewhere etc.&lt;/p&gt;
+
+&lt;p&gt;Here, we will focus on one possibility - running Jupyter Notebook on a virtual machine in the cloud. Specifically, we will speak about Amazon EC2. However, with slight modifications, it applies to Google Cloud or Microsoft Azure as well.&lt;/p&gt;
+
+&lt;p&gt;In the cloud, you can get any memory or number of CPUs you want. But because you pay for them, you want to turn your virtual machine down as much as possible. This guide should make this switching on/off process easy for you.&lt;/p&gt;
+
+&lt;p&gt;I expect you to know AWS EC2 and Jupyter Notebook. Ideally, you already have the virtual machine running and you are looking for tricks to simplify the on/off process.&lt;/p&gt;
+
+&lt;h2 id=&quot;trick-1-get-elastic-ip-address&quot;&gt;Trick #1: Get Elastic IP address&lt;/h2&gt;
+
+&lt;p&gt;Typically, the machine gets a new IP address after you restart it. This might be impractical, to avoid that you need to get a new Elastic IP and link it to your machine.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Create Elastic IP:&lt;/strong&gt; log into Amazon EC2, choose NETWORK &amp;amp; SECURITY / Elastic IP from the left menu (you should get to the page below), click on “Allocate Elastic IP address” button, keep default parameters -&amp;gt; click on allocate. New elastic IP appears (52.205.224.57 on the page below), not yet assigned to any instance.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://simecek.github.io/blog/assets/img/2020-03-08-Jupyter-Notebook-on-Amazon-EC2-Virtual-Machine/media/image1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Link Elastic IP to your instance:&lt;/strong&gt; Now, select your newly created Elastic IP and click on Actions button, select “Associate Address” and choose your instance. It should start working immediately (you might want to reboot the instance, just to be extra sure).&lt;/p&gt;
+
+&lt;h2 id=&quot;trick-2-set-a-password-for-your-jupyter-notebook&quot;&gt;Trick #2: Set a password for your Jupyter Notebook&lt;/h2&gt;
+
+&lt;p&gt;Unless you set the password, you will need to copy a new token every time Jupyter NB restarts.&lt;/p&gt;
+
+&lt;p&gt;Log in to your virtual machine and run jupyter notebook password (you might need to activate your environment first). Restart the Jupyter and test that it asks for the password.&lt;/p&gt;
+
+&lt;h2 id=&quot;trick-3-start-and-stop-your-virtual-machine-from-the-command-line&quot;&gt;Trick #3: Start and stop your virtual machine from the command line&lt;/h2&gt;
+
+&lt;p&gt;The syntax is the following:&lt;/p&gt;
+
+&lt;p&gt;aws ec2 start-instances –instance-ids “YOUR_INSTANCE_ID”&lt;/p&gt;
+
+&lt;p&gt;aws ec2 stop-instances –instance-ids “YOUR_INSTANCE_ID”&lt;/p&gt;
+
+&lt;p&gt;I highly recommend adding these as aliases to your .bashrc file. For example, those are mine:&lt;/p&gt;
+
+&lt;p&gt;alias aws-start=’aws ec2 start-instances –instance-ids “i-0b95ee7b6dd3d4398”’&lt;/p&gt;
+
+&lt;p&gt;alias aws-stop=’aws ec2 stop-instances –instance-ids “i-0b95ee7b6dd3d4398”’&lt;/p&gt;
+
+&lt;p&gt;alias aws-info=’aws ec2 describe-instance-status –instance-ids “i-0b95ee7b6dd3d4398”’&lt;/p&gt;
+
+&lt;p&gt;alias aws-ssh=’ssh -i ~/.ssh/petrs.pem ubuntu@52.205.224.57’&lt;/p&gt;
+
+&lt;h2 id=&quot;trick-4-running-jupyter-notebook-as-a-service&quot;&gt;Trick #4: Running Jupyter Notebook as a service&lt;/h2&gt;
+
+&lt;p&gt;I.e. Jupyter notebook starts automatically when the instance starts. This is the most difficult part and I highly recommend reading &lt;a href=&quot;https://naysan.ca/2019/09/07/jupyter-notebook-as-a-service-on-ubuntu-18-04-with-python-3/&quot;&gt;&lt;span class=&quot;underline&quot;&gt;this guide&lt;/span&gt;&lt;/a&gt; before going further.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Create a file ‘jupyter.service’&lt;/strong&gt;, this is example of mine (using pyenv environments)&lt;/p&gt;
+
+&lt;p&gt;[Unit]&lt;/p&gt;
+
+&lt;p&gt;Description=Jupyter Notebook&lt;/p&gt;
+
+&lt;p&gt;[Service]&lt;/p&gt;
+
+&lt;p&gt;Type=simple&lt;/p&gt;
+
+&lt;p&gt;PIDFile=/run/jupyter.pid&lt;/p&gt;
+
+&lt;p&gt;ExecStart=/bin/bash -c “export PATH=\“/home/ubuntu/.pyenv/bin:$PATH\“;eval \”$(pyenv init -)\“;eval \”$(pyenv virtualenv-init -)\“;pyenv activate venv3.6.9;jupyter-notebook –notebook-dir=/home/ubuntu –ip=0.0.0.0”&lt;/p&gt;
+
+&lt;p&gt;User=ubuntu&lt;/p&gt;
+
+&lt;p&gt;Group=ubuntu&lt;/p&gt;
+
+&lt;p&gt;WorkingDirectory=/home/ubuntu&lt;/p&gt;
+
+&lt;p&gt;Restart=always&lt;/p&gt;
+
+&lt;p&gt;RestartSec=10&lt;/p&gt;
+
+&lt;p&gt;[Install]&lt;/p&gt;
+
+&lt;p&gt;WantedBy=multi-user.target&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Then run the following commands&lt;/strong&gt; in the shell (on your AWS virtual machine)&lt;/p&gt;
+
+&lt;p&gt;sudo cp jupyter.service /etc/systemd/system/&lt;/p&gt;
+
+&lt;p&gt;sudo systemctl enable jupyter.service&lt;/p&gt;
+
+&lt;p&gt;sudo systemctl daemon-reload&lt;/p&gt;
+
+&lt;p&gt;sudo systemctl start jupyter.service&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Time to pray.&lt;/strong&gt; If everything works, your Jupyter Notebook is running and you can access it at http://YOUR_ELASTIC_IP:8888&lt;/p&gt;
+
+&lt;p&gt;You can also check the service as follows:&lt;/p&gt;
+
+&lt;p&gt;systemctl status jupyter.service&lt;/p&gt;
+
+&lt;h2 id=&quot;trick-5-shutting-down-the-instance-automatically&quot;&gt;Trick #5: Shutting down the instance automatically&lt;/h2&gt;
+
+&lt;p&gt;If you are worried that you forgot to shut down the instance, you can set up a cron job to shut it down for you.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Open cron table.&lt;/strong&gt; You need sudo privileges to shut down the machine, so the right command is sudo crontab -e&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Add a cron job.&lt;/strong&gt; Add one line at the end of the file and save. I recommend switching off the machine daily (at 6pm CET) at so, my line is the following&lt;/p&gt;
+
+&lt;p&gt;0 17 * * * /sbin/shutdown -h “now”&lt;/p&gt;
+
+&lt;p&gt;If you want to switch off the machine at a different time or only for some days of the week, see the &lt;a href=&quot;https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/&quot;&gt;&lt;span class=&quot;underline&quot;&gt;cron documentation&lt;/span&gt;&lt;/a&gt;. If you DO NOW want the machine to stop on a given day, you can always access the table by sudo crontab -e and comment out the line (until you finish your job).&lt;/p&gt;</content><author><name></name></author><summary type="html">Motivation</summary></entry><entry><title type="html">Oops, I did it again!</title><link href="https://simecek.github.io/blog/2020/02/25/Oops,-I-did-it-again!.html" rel="alternate" type="text/html" title="Oops, I did it again!" /><published>2020-02-25T00:00:00-06:00</published><updated>2020-02-25T00:00:00-06:00</updated><id>https://simecek.github.io/blog/2020/02/25/Oops,-I-did-it-again!</id><content type="html" xml:base="https://simecek.github.io/blog/2020/02/25/Oops,-I-did-it-again!.html">&lt;p&gt;I have been contributing my photos to Google Maps since 2017. Until today, my pictures have collected almost two million views.&lt;/p&gt;
 
 &lt;p&gt;Some of them make me proud: El Capitan in Yosemite National Park, streets and corners of San Francisco, all the Bay area food you can eat and capture on a camera. And what is the most popular one? Not El Captain, not the ocean, not even cosy coffee shops in Prague but… IKEA in Palo Alto (300+ thousand views).&lt;/p&gt;
 
@@ -24,7 +126,7 @@
 
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h1 id=&quot;About&quot;&gt;About&lt;a class=&quot;anchor-link&quot; href=&quot;#About&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h1&gt;&lt;p&gt;This notebook is a demonstration of some of capabilities of &lt;a href=&quot;https://github.com/fastai/fastpages&quot;&gt;fastpages&lt;/a&gt; with notebooks.&lt;/p&gt;
+&lt;h1 id=&quot;About&quot;&gt;About&lt;a class=&quot;anchor-link&quot; href=&quot;#About&quot;&gt; &lt;/a&gt;&lt;/h1&gt;&lt;p&gt;This notebook is a demonstration of some of capabilities of &lt;a href=&quot;https://github.com/fastai/fastpages&quot;&gt;fastpages&lt;/a&gt; with notebooks.&lt;/p&gt;
 &lt;p&gt;With &lt;code&gt;fastpages&lt;/code&gt; you can save your jupyter notebooks into the &lt;code&gt;_notebooks&lt;/code&gt; folder at the root of your repository, and they will be automatically be converted to Jekyll compliant blog posts!&lt;/p&gt;
 
 &lt;/div&gt;
@@ -32,7 +134,7 @@
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h2 id=&quot;Front-Matter&quot;&gt;Front Matter&lt;a class=&quot;anchor-link&quot; href=&quot;#Front-Matter&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Front Matter is a markdown cell at the beginning of your notebook that allows you to inject metadata into your notebook. For example:&lt;/p&gt;
+&lt;h2 id=&quot;Front-Matter&quot;&gt;Front Matter&lt;a class=&quot;anchor-link&quot; href=&quot;#Front-Matter&quot;&gt; &lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Front Matter is a markdown cell at the beginning of your notebook that allows you to inject metadata into your notebook. For example:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Setting &lt;code&gt;toc: true&lt;/code&gt; will automatically generate a table of contents&lt;/li&gt;
 &lt;li&gt;Setting &lt;code&gt;badges: true&lt;/code&gt; will automatically include GitHub and Google Colab links to your notebook.&lt;/li&gt;
@@ -45,7 +147,7 @@
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h2 id=&quot;Markdown-Shortcuts&quot;&gt;Markdown Shortcuts&lt;a class=&quot;anchor-link&quot; href=&quot;#Markdown-Shortcuts&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;Markdown-Shortcuts&quot;&gt;Markdown Shortcuts&lt;a class=&quot;anchor-link&quot; href=&quot;#Markdown-Shortcuts&quot;&gt; &lt;/a&gt;&lt;/h2&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -119,14 +221,14 @@
 
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h2 id=&quot;Interactive-Charts-With-Altair&quot;&gt;Interactive Charts With Altair&lt;a class=&quot;anchor-link&quot; href=&quot;#Interactive-Charts-With-Altair&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Charts made with Altair remain interactive.  Example charts taken from &lt;a href=&quot;https://github.com/uwdata/visualization-curriculum&quot;&gt;this repo&lt;/a&gt;, specifically &lt;a href=&quot;https://github.com/uwdata/visualization-curriculum/blob/master/altair_interaction.ipynb&quot;&gt;this notebook&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;Interactive-Charts-With-Altair&quot;&gt;Interactive Charts With Altair&lt;a class=&quot;anchor-link&quot; href=&quot;#Interactive-Charts-With-Altair&quot;&gt; &lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Charts made with Altair remain interactive.  Example charts taken from &lt;a href=&quot;https://github.com/uwdata/visualization-curriculum&quot;&gt;this repo&lt;/a&gt;, specifically &lt;a href=&quot;https://github.com/uwdata/visualization-curriculum/blob/master/altair_interaction.ipynb&quot;&gt;this notebook&lt;/a&gt;.&lt;/p&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h3 id=&quot;Example-1:-DropDown&quot;&gt;Example 1: DropDown&lt;a class=&quot;anchor-link&quot; href=&quot;#Example-1:-DropDown&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;Example-1:-DropDown&quot;&gt;Example 1: DropDown&lt;a class=&quot;anchor-link&quot; href=&quot;#Example-1:-DropDown&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -227,7 +329,7 @@
 
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h3 id=&quot;Example-2:-Tooltips&quot;&gt;Example 2: Tooltips&lt;a class=&quot;anchor-link&quot; href=&quot;#Example-2:-Tooltips&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;Example-2:-Tooltips&quot;&gt;Example 2: Tooltips&lt;a class=&quot;anchor-link&quot; href=&quot;#Example-2:-Tooltips&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -320,7 +422,7 @@
 
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h3 id=&quot;Example-3:-More-Tooltips&quot;&gt;Example 3: More Tooltips&lt;a class=&quot;anchor-link&quot; href=&quot;#Example-3:-More-Tooltips&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;Example-3:-More-Tooltips&quot;&gt;Example 3: More Tooltips&lt;a class=&quot;anchor-link&quot; href=&quot;#Example-3:-More-Tooltips&quot;&gt; &lt;/a&gt;&lt;/h3&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -446,7 +548,7 @@
 
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h2 id=&quot;Data-Tables&quot;&gt;Data Tables&lt;a class=&quot;anchor-link&quot; href=&quot;#Data-Tables&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;You can display tables per the usual way in your blog:&lt;/p&gt;
+&lt;h2 id=&quot;Data-Tables&quot;&gt;Data Tables&lt;a class=&quot;anchor-link&quot; href=&quot;#Data-Tables&quot;&gt; &lt;/a&gt;&lt;/h2&gt;&lt;p&gt;You can display tables per the usual way in your blog:&lt;/p&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
@@ -551,7 +653,7 @@
 
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h2 id=&quot;Images&quot;&gt;Images&lt;a class=&quot;anchor-link&quot; href=&quot;#Images&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;h3 id=&quot;Local-Images&quot;&gt;Local Images&lt;a class=&quot;anchor-link&quot; href=&quot;#Local-Images&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;You can reference local images and they will be copied and rendered on your blog automatically.  You can include these with the following markdown syntax:&lt;/p&gt;
+&lt;h2 id=&quot;Images&quot;&gt;Images&lt;a class=&quot;anchor-link&quot; href=&quot;#Images&quot;&gt; &lt;/a&gt;&lt;/h2&gt;&lt;h3 id=&quot;Local-Images&quot;&gt;Local Images&lt;a class=&quot;anchor-link&quot; href=&quot;#Local-Images&quot;&gt; &lt;/a&gt;&lt;/h3&gt;&lt;p&gt;You can reference local images and they will be copied and rendered on your blog automatically.  You can include these with the following markdown syntax:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;![](my_icons/fastai_logo.png)&lt;/code&gt;&lt;/p&gt;
 
 &lt;/div&gt;
@@ -559,14 +661,14 @@
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;p&gt;&lt;img src=&quot;/images/copied_from_nb/my_icons/fastai_logo.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/blog/images/copied_from_nb/my_icons/fastai_logo.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h3 id=&quot;Remote-Images&quot;&gt;Remote Images&lt;a class=&quot;anchor-link&quot; href=&quot;#Remote-Images&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Remote images can be included with the following markdown syntax:&lt;/p&gt;
+&lt;h3 id=&quot;Remote-Images&quot;&gt;Remote Images&lt;a class=&quot;anchor-link&quot; href=&quot;#Remote-Images&quot;&gt; &lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Remote images can be included with the following markdown syntax:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;![](https://image.flaticon.com/icons/svg/36/36686.svg)&lt;/code&gt;&lt;/p&gt;
 
 &lt;/div&gt;
@@ -581,7 +683,7 @@
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h3 id=&quot;Animated-Gifs&quot;&gt;Animated Gifs&lt;a class=&quot;anchor-link&quot; href=&quot;#Animated-Gifs&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Animated Gifs work, too!&lt;/p&gt;
+&lt;h3 id=&quot;Animated-Gifs&quot;&gt;Animated Gifs&lt;a class=&quot;anchor-link&quot; href=&quot;#Animated-Gifs&quot;&gt; &lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Animated Gifs work, too!&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;![](https://upload.wikimedia.org/wikipedia/commons/7/71/ChessPawnSpecialMoves.gif)&lt;/code&gt;&lt;/p&gt;
 
 &lt;/div&gt;
@@ -596,7 +698,7 @@
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h3 id=&quot;Captions&quot;&gt;Captions&lt;a class=&quot;anchor-link&quot; href=&quot;#Captions&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;You can include captions with markdown images like this:&lt;/p&gt;
+&lt;h3 id=&quot;Captions&quot;&gt;Captions&lt;a class=&quot;anchor-link&quot; href=&quot;#Captions&quot;&gt; &lt;/a&gt;&lt;/h3&gt;&lt;p&gt;You can include captions with markdown images like this:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;![](https://www.fast.ai/images/fastai_paper/show_batch.png &quot;Credit: https://www.fast.ai/2020/02/13/fastai-A-Layered-API-for-Deep-Learning/&quot;)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&quot;https://www.fast.ai/images/fastai_paper/show_batch.png&quot; alt=&quot;&quot; title=&quot;Credit: https://www.fast.ai/2020/02/13/fastai-A-Layered-API-for-Deep-Learning/&quot; /&gt;&lt;/p&gt;
@@ -606,13 +708,13 @@
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h1 id=&quot;Other-Elements&quot;&gt;Other Elements&lt;a class=&quot;anchor-link&quot; href=&quot;#Other-Elements&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h1&gt;
+&lt;h1 id=&quot;Other-Elements&quot;&gt;Other Elements&lt;a class=&quot;anchor-link&quot; href=&quot;#Other-Elements&quot;&gt; &lt;/a&gt;&lt;/h1&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h2 id=&quot;Tweetcards&quot;&gt;Tweetcards&lt;a class=&quot;anchor-link&quot; href=&quot;#Tweetcards&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Typing &lt;code&gt;&amp;gt; twitter: https://twitter.com/jakevdp/status/1204765621767901185?s=20&lt;/code&gt; will render this:
+&lt;h2 id=&quot;Tweetcards&quot;&gt;Tweetcards&lt;a class=&quot;anchor-link&quot; href=&quot;#Tweetcards&quot;&gt; &lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Typing &lt;code&gt;&amp;gt; twitter: https://twitter.com/jakevdp/status/1204765621767901185?s=20&lt;/code&gt; will render this:
 
 &lt;center&gt;
 &lt;div class=&quot;jekyll-twitter-plugin&quot;&gt;&lt;blockquote class=&quot;twitter-tweet&quot;&gt;&lt;p lang=&quot;en&quot; dir=&quot;ltr&quot;&gt;Altair 4.0 is released! &lt;a href=&quot;https://t.co/PCyrIOTcvv&quot;&gt;https://t.co/PCyrIOTcvv&lt;/a&gt;&lt;br /&gt;Try it with:&lt;br /&gt;&lt;br /&gt;  pip install -U altair&lt;br /&gt;&lt;br /&gt;The full list of changes is at &lt;a href=&quot;https://t.co/roXmzcsT58&quot;&gt;https://t.co/roXmzcsT58&lt;/a&gt; ...read on for some highlights. &lt;a href=&quot;https://t.co/vWJ0ZveKbZ&quot;&gt;pic.twitter.com/vWJ0ZveKbZ&lt;/a&gt;&lt;/p&gt;&amp;mdash; Jake VanderPlas (@jakevdp) &lt;a href=&quot;https://twitter.com/jakevdp/status/1204765621767901185?ref_src=twsrc%5Etfw&quot;&gt;December 11, 2019&lt;/a&gt;&lt;/blockquote&gt;
@@ -625,7 +727,7 @@
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h2 id=&quot;Youtube-Videos&quot;&gt;Youtube Videos&lt;a class=&quot;anchor-link&quot; href=&quot;#Youtube-Videos&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Typing &lt;code&gt;&amp;gt; youtube: https://youtu.be/XfoYk_Z5AkI&lt;/code&gt; will render this:
+&lt;h2 id=&quot;Youtube-Videos&quot;&gt;Youtube Videos&lt;a class=&quot;anchor-link&quot; href=&quot;#Youtube-Videos&quot;&gt; &lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Typing &lt;code&gt;&amp;gt; youtube: https://youtu.be/XfoYk_Z5AkI&lt;/code&gt; will render this:
 
 &lt;center&gt;
 &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/XfoYk_Z5AkI&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
@@ -636,7 +738,7 @@
 &lt;/div&gt;
 &lt;div class=&quot;cell border-box-sizing text_cell rendered&quot;&gt;&lt;div class=&quot;inner_cell&quot;&gt;
 &lt;div class=&quot;text_cell_render border-box-sizing rendered_html&quot;&gt;
-&lt;h2 id=&quot;Boxes-/-Callouts&quot;&gt;Boxes / Callouts&lt;a class=&quot;anchor-link&quot; href=&quot;#Boxes-/-Callouts&quot;&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Typing &lt;code&gt;&amp;gt; Warning: There will be no second warning!&lt;/code&gt; will render this:
+&lt;h2 id=&quot;Boxes-/-Callouts&quot;&gt;Boxes / Callouts&lt;a class=&quot;anchor-link&quot; href=&quot;#Boxes-/-Callouts&quot;&gt; &lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Typing &lt;code&gt;&amp;gt; Warning: There will be no second warning!&lt;/code&gt; will render this:
 &lt;div class=&quot;flash flash-error&quot;&gt;
     &lt;svg class=&quot;octicon octicon-alert&quot; viewBox=&quot;0 0 16 16&quot; version=&quot;1.1&quot; width=&quot;16&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 000 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 00.01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z&quot; /&gt;&lt;/svg&gt;
     &lt;strong&gt;Warning: &lt;/strong&gt;There will be no second warning!
