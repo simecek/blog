@@ -119,11 +119,17 @@
 
 <p>The syntax is the following:</p>
 
+<p>```</p>
+
 <p>aws ec2 start-instances –instance-ids “YOUR_INSTANCE_ID”</p>
 
 <p>aws ec2 stop-instances –instance-ids “YOUR_INSTANCE_ID”</p>
 
+<p>```</p>
+
 <p>I highly recommend adding these as aliases to your .bashrc file. For example, those are mine:</p>
+
+<p>```</p>
 
 <p>alias aws-start=’aws ec2 start-instances –instance-ids “i-0b95ee7b6dd3d4398”’</p>
 
@@ -133,11 +139,15 @@
 
 <p>alias aws-ssh=’ssh -i ~/.ssh/petrs.pem ubuntu@52.205.224.57’</p>
 
+<p>```</p>
+
 <h2 id="trick-4-running-jupyter-notebook-as-a-service">Trick #4: Running Jupyter Notebook as a service</h2>
 
 <p>I.e. Jupyter notebook starts automatically when the instance starts. This is the most difficult part and I highly recommend reading <a href="https://naysan.ca/2019/09/07/jupyter-notebook-as-a-service-on-ubuntu-18-04-with-python-3/"><span class="underline">this guide</span></a> before going further.</p>
 
 <p><strong>Create a file ‘jupyter.service’</strong>, this is example of mine (using pyenv environments)</p>
+
+<p>```</p>
 
 <p>[Unit]</p>
 
@@ -165,7 +175,11 @@
 
 <p>WantedBy=multi-user.target</p>
 
+<p>```</p>
+
 <p><strong>Then run the following commands</strong> in the shell (on your AWS virtual machine)</p>
+
+<p>```</p>
 
 <p>sudo cp jupyter.service /etc/systemd/system/</p>
 
@@ -175,11 +189,17 @@
 
 <p>sudo systemctl start jupyter.service</p>
 
+<p>```</p>
+
 <p><strong>Time to pray.</strong> If everything works, your Jupyter Notebook is running and you can access it at http://YOUR_ELASTIC_IP:8888</p>
 
 <p>You can also check the service as follows:</p>
 
+<p>```</p>
+
 <p>systemctl status jupyter.service</p>
+
+<p>```</p>
 
 <h2 id="trick-5-shutting-down-the-instance-automatically">Trick #5: Shutting down the instance automatically</h2>
 
@@ -189,7 +209,11 @@
 
 <p><strong>Add a cron job.</strong> Add one line at the end of the file and save. I recommend switching off the machine daily (at 6pm CET) at so, my line is the following</p>
 
+<p>```</p>
+
 <p>0 17 * * * /sbin/shutdown -h “now”</p>
+
+<p>```</p>
 
 <p>If you want to switch off the machine at a different time or only for some days of the week, see the <a href="https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/"><span class="underline">cron documentation</span></a>. If you DO NOW want the machine to stop on a given day, you can always access the table by sudo crontab -e and comment out the line (until you finish your job).</p>
 

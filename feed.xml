@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://simecek.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://simecek.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-03-08T18:46:34-05:00</updated><id>https://simecek.github.io/blog/feed.xml</id><title type="html">Oops, I Did It Again!</title><subtitle>A blog about machines, deoxyribonucleic acids, clouds and all my mistakes.</subtitle><entry><title type="html">Jupyter Notebook In The Cloud (Amazon EC2)</title><link href="https://simecek.github.io/blog/2020/03/08/Jupyter-Notebook-on-Amazon-EC2-Virtual-Machine.html" rel="alternate" type="text/html" title="Jupyter Notebook In The Cloud (Amazon EC2)" /><published>2020-03-08T00:00:00-06:00</published><updated>2020-03-08T00:00:00-06:00</updated><id>https://simecek.github.io/blog/2020/03/08/Jupyter-Notebook-on-Amazon-EC2-Virtual-Machine</id><content type="html" xml:base="https://simecek.github.io/blog/2020/03/08/Jupyter-Notebook-on-Amazon-EC2-Virtual-Machine.html">&lt;h2 id=&quot;motivation&quot;&gt;Motivation&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://simecek.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://simecek.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-03-17T17:58:58-05:00</updated><id>https://simecek.github.io/blog/feed.xml</id><title type="html">Oops, I Did It Again!</title><subtitle>A blog about machines, deoxyribonucleic acids, clouds and all my mistakes.</subtitle><entry><title type="html">Jupyter Notebook In The Cloud (Amazon EC2)</title><link href="https://simecek.github.io/blog/2020/03/08/Jupyter-Notebook-on-Amazon-EC2-Virtual-Machine.html" rel="alternate" type="text/html" title="Jupyter Notebook In The Cloud (Amazon EC2)" /><published>2020-03-08T00:00:00-06:00</published><updated>2020-03-08T00:00:00-06:00</updated><id>https://simecek.github.io/blog/2020/03/08/Jupyter-Notebook-on-Amazon-EC2-Virtual-Machine</id><content type="html" xml:base="https://simecek.github.io/blog/2020/03/08/Jupyter-Notebook-on-Amazon-EC2-Virtual-Machine.html">&lt;h2 id=&quot;motivation&quot;&gt;Motivation&lt;/h2&gt;
 
 &lt;p&gt;If your computation needs overgrow a memory and disk size of your laptop, you need to look around for another solution: using &lt;a href=&quot;https://colab.research.google.com/&quot;&gt;&lt;span class=&quot;underline&quot;&gt;Google Colab&lt;/span&gt;&lt;/a&gt;, running your package as &lt;a href=&quot;http://simecek.xyz/shredded_code/2017/02/17/data-science-amazon-vm-with-start/stop-functionality/&quot;&gt;&lt;span class=&quot;underline&quot;&gt;a docker image&lt;/span&gt;&lt;/a&gt; elsewhere etc.&lt;/p&gt;
 
@@ -28,11 +28,17 @@
 
 &lt;p&gt;The syntax is the following:&lt;/p&gt;
 
+&lt;p&gt;```&lt;/p&gt;
+
 &lt;p&gt;aws ec2 start-instances –instance-ids “YOUR_INSTANCE_ID”&lt;/p&gt;
 
 &lt;p&gt;aws ec2 stop-instances –instance-ids “YOUR_INSTANCE_ID”&lt;/p&gt;
 
+&lt;p&gt;```&lt;/p&gt;
+
 &lt;p&gt;I highly recommend adding these as aliases to your .bashrc file. For example, those are mine:&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
 
 &lt;p&gt;alias aws-start=’aws ec2 start-instances –instance-ids “i-0b95ee7b6dd3d4398”’&lt;/p&gt;
 
@@ -42,11 +48,15 @@
 
 &lt;p&gt;alias aws-ssh=’ssh -i ~/.ssh/petrs.pem ubuntu@52.205.224.57’&lt;/p&gt;
 
+&lt;p&gt;```&lt;/p&gt;
+
 &lt;h2 id=&quot;trick-4-running-jupyter-notebook-as-a-service&quot;&gt;Trick #4: Running Jupyter Notebook as a service&lt;/h2&gt;
 
 &lt;p&gt;I.e. Jupyter notebook starts automatically when the instance starts. This is the most difficult part and I highly recommend reading &lt;a href=&quot;https://naysan.ca/2019/09/07/jupyter-notebook-as-a-service-on-ubuntu-18-04-with-python-3/&quot;&gt;&lt;span class=&quot;underline&quot;&gt;this guide&lt;/span&gt;&lt;/a&gt; before going further.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Create a file ‘jupyter.service’&lt;/strong&gt;, this is example of mine (using pyenv environments)&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
 
 &lt;p&gt;[Unit]&lt;/p&gt;
 
@@ -74,7 +84,11 @@
 
 &lt;p&gt;WantedBy=multi-user.target&lt;/p&gt;
 
+&lt;p&gt;```&lt;/p&gt;
+
 &lt;p&gt;&lt;strong&gt;Then run the following commands&lt;/strong&gt; in the shell (on your AWS virtual machine)&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
 
 &lt;p&gt;sudo cp jupyter.service /etc/systemd/system/&lt;/p&gt;
 
@@ -84,11 +98,17 @@
 
 &lt;p&gt;sudo systemctl start jupyter.service&lt;/p&gt;
 
+&lt;p&gt;```&lt;/p&gt;
+
 &lt;p&gt;&lt;strong&gt;Time to pray.&lt;/strong&gt; If everything works, your Jupyter Notebook is running and you can access it at http://YOUR_ELASTIC_IP:8888&lt;/p&gt;
 
 &lt;p&gt;You can also check the service as follows:&lt;/p&gt;
 
+&lt;p&gt;```&lt;/p&gt;
+
 &lt;p&gt;systemctl status jupyter.service&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
 
 &lt;h2 id=&quot;trick-5-shutting-down-the-instance-automatically&quot;&gt;Trick #5: Shutting down the instance automatically&lt;/h2&gt;
 
@@ -98,7 +118,11 @@
 
 &lt;p&gt;&lt;strong&gt;Add a cron job.&lt;/strong&gt; Add one line at the end of the file and save. I recommend switching off the machine daily (at 6pm CET) at so, my line is the following&lt;/p&gt;
 
+&lt;p&gt;```&lt;/p&gt;
+
 &lt;p&gt;0 17 * * * /sbin/shutdown -h “now”&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
 
 &lt;p&gt;If you want to switch off the machine at a different time or only for some days of the week, see the &lt;a href=&quot;https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/&quot;&gt;&lt;span class=&quot;underline&quot;&gt;cron documentation&lt;/span&gt;&lt;/a&gt;. If you DO NOW want the machine to stop on a given day, you can always access the table by sudo crontab -e and comment out the line (until you finish your job).&lt;/p&gt;</content><author><name></name></author><summary type="html">Motivation</summary></entry><entry><title type="html">Oops, I did it again!</title><link href="https://simecek.github.io/blog/2020/02/25/Oops,-I-did-it-again!.html" rel="alternate" type="text/html" title="Oops, I did it again!" /><published>2020-02-25T00:00:00-06:00</published><updated>2020-02-25T00:00:00-06:00</updated><id>https://simecek.github.io/blog/2020/02/25/Oops,-I-did-it-again!</id><content type="html" xml:base="https://simecek.github.io/blog/2020/02/25/Oops,-I-did-it-again!.html">&lt;p&gt;I have been contributing my photos to Google Maps since 2017. Until today, my pictures have collected almost two million views.&lt;/p&gt;
 
